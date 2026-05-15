@@ -43,6 +43,7 @@ export default function SocialGenEventsPage() {
   const [eventDate, setEventDate] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [phone, setPhone] = useState("");
   const [images, setImages] = useState<PreviewImage[]>([]);
@@ -76,6 +77,7 @@ export default function SocialGenEventsPage() {
 
     const payload = {
       name,
+      email,
       phone,
       eventDate,
       eventLocation,
@@ -605,6 +607,11 @@ export default function SocialGenEventsPage() {
                 <div className="sge-field">
                   <label htmlFor="phone">Mobile number</label>
                   <input id="phone" name="phone" type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} required />
+                </div>
+
+                <div className="sge-field">
+                  <label htmlFor="email">Email</label>
+                  <input id="email" name="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
                 </div>
 
                 <div className="sge-field">

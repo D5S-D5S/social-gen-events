@@ -21,6 +21,7 @@ export default function SocialGenEventsFunnelPage() {
   const [eventLocation, setEventLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [images, setImages] = useState<PreviewImage[]>([]);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -31,7 +32,7 @@ export default function SocialGenEventsFunnelPage() {
     (step === 1 && style) ||
     (step === 2 && eventDate && eventLocation) ||
     step === 3 ||
-    (step === 4 && name && phone);
+    (step === 4 && name && email && phone);
 
   function handleImages(event: ChangeEvent<HTMLInputElement>) {
     const remainingSlots = Math.max(0, 5 - images.length);
@@ -67,6 +68,7 @@ export default function SocialGenEventsFunnelPage() {
 
     const payload = {
       name,
+      email,
       phone,
       eventDate,
       eventLocation,
@@ -638,6 +640,10 @@ export default function SocialGenEventsFunnelPage() {
                     <div className="sgf-field">
                       <label htmlFor="phone">Mobile number</label>
                       <input id="phone" type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} required />
+                    </div>
+                    <div className="sgf-field">
+                      <label htmlFor="email">Email</label>
+                      <input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
                     </div>
                   </div>
                 </>
