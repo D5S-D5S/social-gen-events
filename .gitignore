@@ -9,3 +9,7 @@ dev-server.log
 dev-server.err
 *.tsbuildinfo
 .env*
+
+# Local Netlify folder
+.netlify
+deno.lock
