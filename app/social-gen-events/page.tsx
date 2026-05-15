@@ -74,19 +74,28 @@ export default function SocialGenEventsPage() {
     event.preventDefault();
     setStatus("sending");
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("phone", phone);
-    formData.append("eventDate", eventDate);
-    formData.append("eventLocation", eventLocation);
-    formData.append("eventType", eventType);
-    formData.append("notes", notes);
-    images.forEach((image) => formData.append("inspirationPhotos", image.file, image.name));
+    const payload = {
+      name,
+      phone,
+      eventDate,
+      eventLocation,
+      eventType,
+      notes,
+      inspirationPhotoCount: images.length,
+      inspirationPhotos: images.map((image) => ({
+        name: image.name,
+        size: image.file.size,
+        type: image.file.type,
+      })),
+    };
 
     try {
-      const response = await fetch("/api/social-gen-events", {
+      const response = await fetch("/.netlify/functions/social-gen-events", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) throw new Error("Enquiry failed");
