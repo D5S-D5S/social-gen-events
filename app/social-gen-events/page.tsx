@@ -122,6 +122,8 @@ export default function SocialGenEventsPage() {
           --rose: #dba8b6;
           --gold: #b8895e;
           min-height: 100vh;
+          width: 100%;
+          overflow-x: hidden;
           background: var(--cream);
           color: var(--ink);
           font-family: "DM Sans", Arial, sans-serif;
@@ -132,8 +134,9 @@ export default function SocialGenEventsPage() {
         }
 
         .sge-wrap {
-          width: min(1040px, calc(100% - 28px));
-          margin: 0 auto;
+          width: 100%;
+          margin: 0;
+          padding: 0 clamp(16px, 5vw, 72px);
         }
 
         .sge-top {
@@ -169,8 +172,8 @@ export default function SocialGenEventsPage() {
 
         .sge-hero {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(320px, 0.78fr);
-          gap: 34px;
+          grid-template-columns: minmax(0, 1fr) minmax(340px, 0.78fr);
+          gap: clamp(24px, 4vw, 56px);
           align-items: start;
           padding: 30px 0 42px;
         }
@@ -234,7 +237,7 @@ export default function SocialGenEventsPage() {
 
         .sge-card {
           margin-top: 24px;
-          max-width: 680px;
+          max-width: none;
           border: 1px solid var(--line);
           background: white;
           color: #111111;
@@ -519,7 +522,7 @@ export default function SocialGenEventsPage() {
 
         @media (max-width: 560px) {
           .sge-wrap {
-            width: min(100% - 22px, 1040px);
+            padding: 0 11px;
           }
 
           .sge-top {

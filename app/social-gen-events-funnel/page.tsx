@@ -113,6 +113,8 @@ export default function SocialGenEventsFunnelPage() {
           --soft: #fff1f3;
           --gold: #b8895e;
           min-height: 100vh;
+          width: 100%;
+          overflow-x: hidden;
           background: var(--cream);
           color: var(--ink);
           font-family: "DM Sans", Arial, sans-serif;
@@ -121,8 +123,9 @@ export default function SocialGenEventsFunnelPage() {
         .sgf-page * { box-sizing: border-box; }
 
         .sgf-shell {
-          width: min(1120px, calc(100% - 28px));
-          margin: 0 auto;
+          width: 100%;
+          margin: 0;
+          padding: 0 clamp(16px, 5vw, 72px);
         }
 
         .sgf-top {
@@ -156,8 +159,8 @@ export default function SocialGenEventsFunnelPage() {
 
         .sgf-hero {
           display: grid;
-          grid-template-columns: minmax(0, 0.96fr) minmax(320px, 0.82fr);
-          gap: 34px;
+          grid-template-columns: minmax(0, 0.96fr) minmax(340px, 0.82fr);
+          gap: clamp(24px, 4vw, 56px);
           align-items: start;
           padding: 28px 0 56px;
         }
@@ -481,7 +484,7 @@ export default function SocialGenEventsFunnelPage() {
 
         @media (max-width: 560px) {
           .sgf-shell {
-            width: min(100% - 22px, 1120px);
+            padding: 0 11px;
           }
 
           .sgf-top {
