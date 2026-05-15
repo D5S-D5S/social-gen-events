@@ -214,9 +214,14 @@ export default function SocialGenEventsPage() {
           box-shadow: 0 18px 38px rgba(91, 58, 43, 0.13);
         }
 
+        .sge-media {
+          position: sticky;
+          top: 82px;
+        }
+
         .sge-card {
           margin-top: 24px;
-          max-width: 620px;
+          max-width: 680px;
           border: 1px solid var(--line);
           background: white;
           color: #111111;
@@ -291,6 +296,20 @@ export default function SocialGenEventsPage() {
         .sge-upload input {
           min-height: 44px;
           padding: 8px 0;
+          width: 100%;
+        }
+
+        .sge-upload input::file-selector-button {
+          min-height: 40px;
+          border: 1px solid #111111;
+          background: #ffffff;
+          color: #111111;
+          cursor: pointer;
+          font-family: "DM Sans", Arial, sans-serif;
+          font-size: 14px;
+          font-weight: 900;
+          margin-right: 10px;
+          padding: 0 14px;
         }
 
         .sge-help {
@@ -460,6 +479,7 @@ export default function SocialGenEventsPage() {
 
           .sge-media {
             order: 3;
+            position: static;
           }
 
           .sge-photo {
@@ -547,10 +567,10 @@ export default function SocialGenEventsPage() {
 
         <section className="sge-hero" id="top">
           <div className="sge-copy">
-            <p className="sge-kicker">London summer celebrations</p>
+            <p className="sge-kicker">Summer celebrations</p>
             <h1>Bespoke event styling for your summer date</h1>
             <p>
-              Balloon displays, styled backdrops and photo moments planned around your venue, budget and inspiration.
+              Balloon displays, styled backdrops and photo moments planned around your venue, theme and inspiration.
             </p>
             <div className="sge-offer">Only 8 summer Saturdays remaining</div>
 
@@ -642,7 +662,7 @@ export default function SocialGenEventsPage() {
               </button>
               <p className="sge-fine">We reply quickly. No spam, ever.</p>
               {status === "sent" ? <div className="sge-alert">Thank you. Your enquiry has been sent.</div> : null}
-              {status === "error" ? <div className="sge-alert">Something went wrong. Please try again.</div> : null}
+              {status === "error" ? <div className="sge-alert">We could not send this just now. Please try again.</div> : null}
             </form>
           </div>
 
@@ -658,11 +678,11 @@ export default function SocialGenEventsPage() {
         <section className="sge-proof" aria-label="Useful details">
           <article>
             <strong>150+ families styled</strong>
-            <p>London and selected South East venues.</p>
+            <p>Beautiful setups for birthdays, showers, weddings and milestone celebrations.</p>
           </article>
           <article>
             <strong>Quote-ready details</strong>
-            <p>Date, budget and inspiration in one short form.</p>
+            <p>Date, location, theme and inspiration in one short form.</p>
           </article>
           <article>
             <strong>Premium setup</strong>
@@ -686,7 +706,7 @@ export default function SocialGenEventsPage() {
             </article>
             <article>
               <h3>Do you cover my area?</h3>
-              <p>We cover London and selected locations across the South East. Share your venue postcode in your enquiry.</p>
+              <p>Share your venue, town or postcode in your enquiry and we will confirm availability for your date.</p>
             </article>
             <article>
               <h3>Can you match my theme?</h3>

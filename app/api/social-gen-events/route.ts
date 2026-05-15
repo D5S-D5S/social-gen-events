@@ -6,18 +6,34 @@ const WEBHOOK_URL =
 export async function POST(request: Request) {
   try {
     const incoming = await request.formData();
-    const payload = new FormData();
+    const inspirationPhotos = incoming
+      .getAll("inspirationPhotos")
+      .filter((value): value is File => value instanceof File)
+      .map((file) => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      }));
 
-    for (const [key, value] of incoming.entries()) {
-      payload.append(key, value);
-    }
-
-    payload.append("source", "social-gen-events-landing-page");
-    payload.append("submittedAt", new Date().toISOString());
+    const payload = {
+      name: incoming.get("name")?.toString() ?? "",
+      phone: incoming.get("phone")?.toString() ?? "",
+      eventDate: incoming.get("eventDate")?.toString() ?? "",
+      eventLocation: incoming.get("eventLocation")?.toString() ?? "",
+      eventType: incoming.get("eventType")?.toString() ?? "",
+      notes: incoming.get("notes")?.toString() ?? "",
+      inspirationPhotoCount: inspirationPhotos.length,
+      inspirationPhotos,
+      source: "social-gen-events-landing-page",
+      submittedAt: new Date().toISOString(),
+    };
 
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
-      body: payload,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
