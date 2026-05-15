@@ -10,13 +10,11 @@ type PreviewImage = {
 };
 
 const eventTypes = ["Birthday", "Baby shower", "Wedding", "Graduation", "Gender reveal", "Corporate", "Other"];
-const styles = ["Neutral luxe", "Pastel", "Bold colour", "Themed", "Not sure yet"];
-const steps = ["Event", "Style", "Details", "Inspiration", "Contact"];
+const steps = ["Event", "Details", "Inspiration", "Contact"];
 
 export default function SocialGenEventsFunnelPage() {
   const [step, setStep] = useState(0);
   const [eventType, setEventType] = useState("");
-  const [style, setStyle] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [notes, setNotes] = useState("");
@@ -29,10 +27,9 @@ export default function SocialGenEventsFunnelPage() {
   const progress = useMemo(() => Math.round(((step + 1) / steps.length) * 100), [step]);
   const canContinue =
     (step === 0 && eventType) ||
-    (step === 1 && style) ||
-    (step === 2 && eventDate && eventLocation) ||
-    step === 3 ||
-    (step === 4 && name && email && phone);
+    (step === 1 && eventDate && eventLocation) ||
+    step === 2 ||
+    (step === 3 && name && email && phone);
 
   function handleImages(event: ChangeEvent<HTMLInputElement>) {
     const remainingSlots = Math.max(0, 5 - images.length);
@@ -73,7 +70,6 @@ export default function SocialGenEventsFunnelPage() {
       eventDate,
       eventLocation,
       eventType,
-      style,
       notes,
       source: "social-gen-events-guided-funnel",
       sourceLabel: "Social Gen Events - guided funnel",
@@ -566,21 +562,6 @@ export default function SocialGenEventsFunnelPage() {
 
               {step === 1 ? (
                 <>
-                  <h2>Which style feels closest?</h2>
-                  <p>Pick the nearest direction. We can refine the colours after your enquiry.</p>
-                  <div className="sgf-options">
-                    {styles.map((option) => (
-                      <button className={`sgf-option ${style === option ? "sgf-option-active" : ""}`} key={option} type="button" onClick={() => setStyle(option)}>
-                        <span>{option}</span>
-                        <span>{style === option ? "Selected" : "+"}</span>
-                      </button>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {step === 2 ? (
-                <>
                   <h2>When and where is it?</h2>
                   <p>We use this to check availability and installation details.</p>
                   <div className="sgf-fields">
@@ -596,7 +577,7 @@ export default function SocialGenEventsFunnelPage() {
                 </>
               ) : null}
 
-              {step === 3 ? (
+              {step === 2 ? (
                 <>
                   <h2>Show us the look</h2>
                   <p>Add notes or inspiration images so we can quote with less back and forth.</p>
@@ -628,7 +609,7 @@ export default function SocialGenEventsFunnelPage() {
                 </>
               ) : null}
 
-              {step === 4 ? (
+              {step === 3 ? (
                 <>
                   <h2>Where should we reply?</h2>
                   <p>We will send availability and styling options for your date.</p>
