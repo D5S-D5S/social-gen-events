@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const APP_URL = "https://balloon-base.vercel.app";
+const APP_URL = "https://social-gen-events.netlify.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
-  title: { default: "BalloonBase — The Balloon Business Platform", template: "%s | BalloonBase" },
-  description: "All-in-one software for balloon decoration businesses. Manage bookings, quotes, inventory, and clients in one place.",
-  keywords: ["balloon decorator software", "balloon business management", "event decorator app", "balloon quote generator"],
-  authors: [{ name: "BalloonBase" }],
+  title: { default: "Social Gen Events", template: "%s | Social Gen Events" },
+  description: "Bespoke balloon displays, styled backdrops and decor for celebrations.",
+  keywords: ["balloon displays", "event decor", "balloon styling", "party backdrop"],
+  authors: [{ name: "Social Gen Events" }],
   openGraph: {
     type: "website",
     url: APP_URL,
-    title: "BalloonBase — The Balloon Business Platform",
-    description: "Run your balloon business without the chaos. Bookings, quotes, inventory, and clients — all in one place.",
-    siteName: "BalloonBase",
+    title: "Social Gen Events",
+    description: "Bespoke balloon displays, styled backdrops and decor for celebrations.",
+    siteName: "Social Gen Events",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BalloonBase — The Balloon Business Platform",
-    description: "Run your balloon business without the chaos.",
+    title: "Social Gen Events",
+    description: "Bespoke balloon displays, styled backdrops and decor for celebrations.",
   },
   robots: { index: true, follow: true },
 };
