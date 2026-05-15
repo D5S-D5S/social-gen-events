@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.vercel/
+.npm-cache/
+.claude/
+.superpowers/
+EXTRACTED_*.tsx
+dev-server.log
+dev-server.err
+*.tsbuildinfo
+.env*
