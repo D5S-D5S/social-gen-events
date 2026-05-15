@@ -81,6 +81,10 @@ export default function SocialGenEventsPage() {
       eventLocation,
       eventType,
       notes,
+      source: "social-gen-events-standard",
+      sourceLabel: "Social Gen Events - standard landing page",
+      funnelVersion: "standard",
+      landingPageUrl: window.location.href,
       inspirationPhotoCount: images.length,
       inspirationPhotos: images.map((image) => ({
         name: image.name,
@@ -585,6 +589,9 @@ export default function SocialGenEventsPage() {
 
             <form className="sge-card" id="quote" onSubmit={handleSubmit}>
               <h2>Get a tailored quote</h2>
+              <input type="hidden" name="source" value="social-gen-events-standard" />
+              <input type="hidden" name="sourceLabel" value="Social Gen Events - standard landing page" />
+              <input type="hidden" name="funnelVersion" value="standard" />
 
               <div className="sge-grid">
                 <div className="sge-field">

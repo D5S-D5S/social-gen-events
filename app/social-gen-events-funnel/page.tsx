@@ -73,7 +73,10 @@ export default function SocialGenEventsFunnelPage() {
       eventType,
       style,
       notes,
+      source: "social-gen-events-guided-funnel",
+      sourceLabel: "Social Gen Events - guided funnel",
       funnelVersion: "guided",
+      landingPageUrl: window.location.href,
       inspirationPhotoCount: images.length,
       inspirationPhotos: images.map((image) => ({
         name: image.name,
@@ -531,6 +534,9 @@ export default function SocialGenEventsFunnelPage() {
             <p>Choose the celebration, style and date. We will reply with tailored options based on your venue and inspiration.</p>
 
             <form className="sgf-panel" onSubmit={handleSubmit}>
+              <input type="hidden" name="source" value="social-gen-events-guided-funnel" />
+              <input type="hidden" name="sourceLabel" value="Social Gen Events - guided funnel" />
+              <input type="hidden" name="funnelVersion" value="guided" />
               <div className="sgf-progress" aria-label={`Step ${step + 1} of ${steps.length}`}>
                 <span style={{ "--progress": `${progress}%` } as CSSProperties} />
               </div>

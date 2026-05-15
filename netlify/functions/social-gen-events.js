@@ -17,7 +17,10 @@ exports.handler = async (event) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...body,
-        source: "Social Gen Events landing page",
+        source: body.source || "social-gen-events",
+        sourceLabel: body.sourceLabel || "Social Gen Events landing page",
+        funnelVersion: body.funnelVersion || "unknown",
+        landingPageUrl: body.landingPageUrl || "",
         submittedAt: new Date().toISOString(),
       }),
     });
