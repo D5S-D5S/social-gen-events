@@ -19,6 +19,9 @@ const eventTypes = [
   "Other",
 ];
 
+const serviceOptions = ["Balloon display", "Bouncy castle", "360 photobooth", "Selfie booth", "Flower wall", "Other", "Not sure"];
+const contactMethods = ["Email", "SMS", "WhatsApp"];
+
 const galleryImages = [
   {
     src: "/social-gen-events/social-gen-05.jpg",
@@ -42,10 +45,13 @@ export default function SocialGenEventsPage() {
   const [eventType, setEventType] = useState(eventTypes[0]);
   const [eventDate, setEventDate] = useState("");
   const [eventLocation, setEventLocation] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [otherService, setOtherService] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [phone, setPhone] = useState("");
+  const [contactMethod, setContactMethod] = useState("");
   const [images, setImages] = useState<PreviewImage[]>([]);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -71,6 +77,10 @@ export default function SocialGenEventsPage() {
     });
   }
 
+  function toggleService(service: string) {
+    setSelectedServices((current) => (current.includes(service) ? current.filter((item) => item !== service) : [...current, service]));
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("sending");
@@ -82,7 +92,10 @@ export default function SocialGenEventsPage() {
       eventDate,
       eventLocation,
       eventType,
+      lookingFor: selectedServices,
+      otherService,
       notes,
+      preferredContactMethod: contactMethod,
       source: "social-gen-events-standard",
       sourceLabel: "Social Gen Events - standard landing page",
       funnelVersion: "standard",
@@ -388,6 +401,34 @@ export default function SocialGenEventsPage() {
           cursor: wait;
         }
 
+        .sge-choice-grid {
+          display: grid;
+          gap: 9px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sge-choice {
+          min-height: 48px;
+          border: 1px solid #d9cdc3;
+          background: #fffaf5;
+          color: #111111;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 0 12px;
+          font-size: 14px;
+          font-weight: 900;
+          text-align: left;
+        }
+
+        .sge-choice-active {
+          border-color: var(--deep);
+          background: var(--blush);
+          box-shadow: 0 0 0 3px rgba(184, 137, 94, 0.14);
+        }
+
         .sge-fine {
           color: var(--muted);
           font-size: 12px;
@@ -403,6 +444,18 @@ export default function SocialGenEventsPage() {
           font-weight: 800;
           margin-top: 12px;
           padding: 10px 12px;
+        }
+
+        .sge-alert-success {
+          border-color: #a8d5b3;
+          background: #eefaf1;
+          color: #176b34;
+        }
+
+        .sge-alert-error {
+          border-color: #e0b8b8;
+          background: #fff1f1;
+          color: #7b2c2c;
         }
 
         .sge-proof {
@@ -615,6 +668,18 @@ export default function SocialGenEventsPage() {
                 </div>
 
                 <div className="sge-field">
+                  <label>Best method to contact you</label>
+                  <div className="sge-choice-grid">
+                    {contactMethods.map((method) => (
+                      <button className={`sge-choice ${contactMethod === method ? "sge-choice-active" : ""}`} key={method} type="button" onClick={() => setContactMethod(method)}>
+                        <span>{method}</span>
+                        <span>{contactMethod === method ? "Selected" : "+"}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="sge-field">
                   <label htmlFor="event-date">Event date</label>
                   <input id="event-date" name="event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} required />
                 </div>
@@ -642,6 +707,28 @@ export default function SocialGenEventsPage() {
                     ))}
                   </select>
                 </div>
+
+                <div className="sge-field sge-field-full">
+                  <label>What are you looking for?</label>
+                  <div className="sge-choice-grid">
+                    {serviceOptions.map((service) => {
+                      const isSelected = selectedServices.includes(service);
+                      return (
+                        <button className={`sge-choice ${isSelected ? "sge-choice-active" : ""}`} key={service} type="button" onClick={() => toggleService(service)}>
+                          <span>{service}</span>
+                          <span>{isSelected ? "Yes" : "+"}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {selectedServices.includes("Other") ? (
+                  <div className="sge-field sge-field-full">
+                    <label htmlFor="other-service">Other setup</label>
+                    <input id="other-service" name="other-service" type="text" value={otherService} onChange={(event) => setOtherService(event.target.value)} placeholder="Tell us what you need" />
+                  </div>
+                ) : null}
 
                 <div className="sge-field sge-field-full">
                   <label htmlFor="notes">What would you like created?</label>
@@ -687,8 +774,8 @@ export default function SocialGenEventsPage() {
                 {status === "sending" ? "Sending..." : "Send enquiry"}
               </button>
               <p className="sge-fine">We reply quickly. No spam, ever.</p>
-              {status === "sent" ? <div className="sge-alert">Thank you. Your enquiry has been sent.</div> : null}
-              {status === "error" ? <div className="sge-alert">We could not send this just now. Please try again.</div> : null}
+              {status === "sent" ? <div className="sge-alert sge-alert-success">Thank you. Your enquiry has been sent.</div> : null}
+              {status === "error" ? <div className="sge-alert sge-alert-error">We could not send this just now. Please try again.</div> : null}
             </form>
           </div>
 

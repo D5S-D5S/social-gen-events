@@ -10,17 +10,22 @@ type PreviewImage = {
 };
 
 const eventTypes = ["Birthday", "Baby shower", "Wedding", "Graduation", "Gender reveal", "Corporate", "Other"];
-const steps = ["Event", "Details", "Inspiration", "Contact"];
+const serviceOptions = ["Balloon display", "Bouncy castle", "360 photobooth", "Selfie booth", "Flower wall", "Other", "Not sure"];
+const contactMethods = ["Email", "SMS", "WhatsApp"];
+const steps = ["Event", "Details", "Setup", "Inspiration", "Contact"];
 
 export default function SocialGenEventsFunnelPage() {
   const [step, setStep] = useState(0);
   const [eventType, setEventType] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventLocation, setEventLocation] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [otherService, setOtherService] = useState("");
   const [notes, setNotes] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [contactMethod, setContactMethod] = useState("");
   const [images, setImages] = useState<PreviewImage[]>([]);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -28,8 +33,18 @@ export default function SocialGenEventsFunnelPage() {
   const canContinue =
     (step === 0 && eventType) ||
     (step === 1 && eventDate && eventLocation) ||
-    step === 2 ||
-    (step === 3 && name && email && phone);
+    (step === 2 && selectedServices.length > 0 && (!selectedServices.includes("Other") || otherService.trim())) ||
+    step === 3 ||
+    (step === 4 && name && email && phone && contactMethod);
+
+  function selectEventType(type: string) {
+    setEventType(type);
+    setStep(1);
+  }
+
+  function toggleService(service: string) {
+    setSelectedServices((current) => (current.includes(service) ? current.filter((item) => item !== service) : [...current, service]));
+  }
 
   function handleImages(event: ChangeEvent<HTMLInputElement>) {
     const remainingSlots = Math.max(0, 5 - images.length);
@@ -70,7 +85,10 @@ export default function SocialGenEventsFunnelPage() {
       eventDate,
       eventLocation,
       eventType,
+      lookingFor: selectedServices,
+      otherService,
       notes,
+      preferredContactMethod: contactMethod,
       source: "social-gen-events-guided-funnel",
       sourceLabel: "Social Gen Events - guided funnel",
       funnelVersion: "guided",
@@ -280,6 +298,18 @@ export default function SocialGenEventsFunnelPage() {
           box-shadow: 0 0 0 3px rgba(184, 137, 94, 0.15);
         }
 
+        .sgf-checkbox {
+          width: 22px;
+          height: 22px;
+          border: 1px solid #b8895e;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--deep);
+          flex: 0 0 auto;
+          font-size: 13px;
+        }
+
         .sgf-field {
           display: grid;
           gap: 7px;
@@ -431,6 +461,18 @@ export default function SocialGenEventsFunnelPage() {
           padding: 10px 12px;
         }
 
+        .sgf-alert-success {
+          border-color: #a8d5b3;
+          background: #eefaf1;
+          color: #176b34;
+        }
+
+        .sgf-alert-error {
+          border-color: #e0b8b8;
+          background: #fff1f1;
+          color: #7b2c2c;
+        }
+
         .sgf-proof {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -532,7 +574,7 @@ export default function SocialGenEventsFunnelPage() {
           <div className="sgf-copy">
             <p className="sgf-kicker">Guided styling enquiry</p>
             <h1>Build your balloon display brief in under a minute</h1>
-            <p>Choose the celebration, style and date. We will reply with tailored options based on your venue and inspiration.</p>
+            <p>Choose the celebration, date and setup. We will reply with tailored options based on your venue and inspiration.</p>
 
             <form className="sgf-panel" onSubmit={handleSubmit}>
               <input type="hidden" name="source" value="social-gen-events-guided-funnel" />
@@ -551,9 +593,9 @@ export default function SocialGenEventsFunnelPage() {
                   <p>This helps us shape the right setup size, backdrop and finish.</p>
                   <div className="sgf-options">
                     {eventTypes.map((type) => (
-                      <button className={`sgf-option ${eventType === type ? "sgf-option-active" : ""}`} key={type} type="button" onClick={() => setEventType(type)}>
+                      <button className={`sgf-option ${eventType === type ? "sgf-option-active" : ""}`} key={type} type="button" onClick={() => selectEventType(type)}>
                         <span>{type}</span>
-                        <span>{eventType === type ? "Selected" : "+"}</span>
+                        <span>Choose</span>
                       </button>
                     ))}
                   </div>
@@ -578,6 +620,30 @@ export default function SocialGenEventsFunnelPage() {
               ) : null}
 
               {step === 2 ? (
+                <>
+                  <h2>What are you looking for?</h2>
+                  <p>Tick everything that applies. Choose “Not sure” if you want us to recommend the setup.</p>
+                  <div className="sgf-options">
+                    {serviceOptions.map((service) => {
+                      const isSelected = selectedServices.includes(service);
+                      return (
+                        <button className={`sgf-option ${isSelected ? "sgf-option-active" : ""}`} key={service} type="button" onClick={() => toggleService(service)}>
+                          <span>{service}</span>
+                          <span className="sgf-checkbox">{isSelected ? "Yes" : ""}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedServices.includes("Other") ? (
+                    <div className="sgf-field" style={{ marginTop: 10 }}>
+                      <label htmlFor="other-service">Other setup</label>
+                      <input id="other-service" type="text" value={otherService} onChange={(event) => setOtherService(event.target.value)} placeholder="Tell us what you need" required />
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+
+              {step === 3 ? (
                 <>
                   <h2>Show us the look</h2>
                   <p>Add notes or inspiration images so we can quote with less back and forth.</p>
@@ -609,11 +675,22 @@ export default function SocialGenEventsFunnelPage() {
                 </>
               ) : null}
 
-              {step === 3 ? (
+              {step === 4 ? (
                 <>
                   <h2>Where should we reply?</h2>
                   <p>We will send availability and styling options for your date.</p>
                   <div className="sgf-fields">
+                    <div className="sgf-field">
+                      <label>Best method to contact you</label>
+                      <div className="sgf-options">
+                        {contactMethods.map((method) => (
+                          <button className={`sgf-option ${contactMethod === method ? "sgf-option-active" : ""}`} key={method} type="button" onClick={() => setContactMethod(method)}>
+                            <span>{method}</span>
+                            <span>{contactMethod === method ? "Selected" : "+"}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                     <div className="sgf-field">
                       <label htmlFor="name">Name</label>
                       <input id="name" type="text" value={name} onChange={(event) => setName(event.target.value)} required />
@@ -630,17 +707,19 @@ export default function SocialGenEventsFunnelPage() {
                 </>
               ) : null}
 
-              <div className="sgf-actions">
-                <button className="sgf-back" type="button" disabled={step === 0 || status === "sending"} onClick={() => setStep((current) => Math.max(current - 1, 0))}>
-                  Back
-                </button>
-                <button className="sgf-next" type="submit" disabled={!canContinue || status === "sending"}>
-                  {step === steps.length - 1 ? (status === "sending" ? "Sending..." : "Send enquiry") : "Continue"}
-                </button>
-              </div>
+              {step === 0 ? null : (
+                <div className="sgf-actions">
+                  <button className="sgf-back" type="button" disabled={step === 0 || status === "sending"} onClick={() => setStep((current) => Math.max(current - 1, 0))}>
+                    Back
+                  </button>
+                  <button className="sgf-next" type="submit" disabled={!canContinue || status === "sending"}>
+                    {step === steps.length - 1 ? (status === "sending" ? "Sending..." : "Send enquiry") : "Continue"}
+                  </button>
+                </div>
+              )}
               <p className="sgf-fine">Quick reply. No spam, ever.</p>
-              {status === "sent" ? <div className="sgf-alert">Thank you. Your enquiry has been sent.</div> : null}
-              {status === "error" ? <div className="sgf-alert">We could not send this just now. Please try again.</div> : null}
+              {status === "sent" ? <div className="sgf-alert sgf-alert-success">Thank you. Your enquiry has been sent.</div> : null}
+              {status === "error" ? <div className="sgf-alert sgf-alert-error">We could not send this just now. Please try again.</div> : null}
             </form>
           </div>
 
