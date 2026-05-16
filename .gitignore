@@ -10,6 +10,7 @@ dev-server.log
 dev-server.err
 *.tsbuildinfo
 .env*
+!.env.example
 
 # Local Netlify folder
 .netlify

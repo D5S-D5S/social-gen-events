@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, CSSProperties, FormEvent, useMemo, useState } from "react";
+import { uploadInspirationPhotos } from "@/lib/social-gen-events/image-upload";
 
 type PreviewImage = {
   file: File;
@@ -78,30 +79,29 @@ export default function SocialGenEventsFunnelPage() {
 
     setStatus("sending");
 
-    const payload = {
-      name,
-      email,
-      phone,
-      eventDate,
-      eventLocation,
-      eventType,
-      lookingFor: selectedServices,
-      otherService,
-      notes,
-      preferredContactMethod: contactMethod,
-      source: "social-gen-events-guided-funnel",
-      sourceLabel: "Social Gen Events - guided funnel",
-      funnelVersion: "guided",
-      landingPageUrl: window.location.href,
-      inspirationPhotoCount: images.length,
-      inspirationPhotos: images.map((image) => ({
-        name: image.name,
-        size: image.file.size,
-        type: image.file.type,
-      })),
-    };
-
     try {
+      const uploadedImages = await uploadInspirationPhotos(images);
+      const payload = {
+        name,
+        email,
+        phone,
+        eventDate,
+        eventLocation,
+        eventType,
+        lookingFor: selectedServices,
+        otherService,
+        notes,
+        preferredContactMethod: contactMethod,
+        source: "social-gen-events-guided-funnel",
+        sourceLabel: "Social Gen Events - guided funnel",
+        funnelVersion: "guided",
+        landingPageUrl: window.location.href,
+        inspirationPhotoCount: images.length,
+        inspirationPhotoUrls: uploadedImages.urls,
+        inspirationPhotos: uploadedImages.photos,
+        imageUploadConfigured: uploadedImages.configured,
+      };
+
       const response = await fetch("/.netlify/functions/social-gen-events", {
         method: "POST",
         headers: {
